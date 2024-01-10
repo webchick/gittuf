@@ -62,7 +62,7 @@ func (r *Repository) InitializeTargets(ctx context.Context, targetsKeyBytes []by
 
 // AddDelegation is the interface for the user to add a new rule to gittuf
 // policy.
-func (r *Repository) AddDelegation(ctx context.Context, signingKeyBytes []byte, targetsRoleName string, ruleName string, authorizedKeysBytes [][]byte, rulePatterns []string, signCommit bool) error {
+func (r *Repository) AddDelegation(ctx context.Context, signingKeyBytes []byte, targetsRoleName string, ruleName string, authorizedKeysBytes [][]byte, rulePatterns []string, threshold int, signCommit bool) error {
 	sv, err := signerverifier.NewSignerVerifierFromSecureSystemsLibFormat(signingKeyBytes)
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func (r *Repository) AddDelegation(ctx context.Context, signingKeyBytes []byte, 
 		return err
 	}
 
-	targetsMetadata, err = policy.AddOrUpdateDelegation(targetsMetadata, ruleName, authorizedKeys, rulePatterns)
+	targetsMetadata, err = policy.AddOrUpdateDelegation(targetsMetadata, ruleName, authorizedKeys, rulePatterns, threshold)
 	if err != nil {
 		return err
 	}

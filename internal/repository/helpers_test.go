@@ -80,7 +80,7 @@ func createTestRepositoryWithPolicy(t *testing.T, location string) *Repository {
 	}
 	authorizedKeys := [][]byte{kb}
 
-	if err := r.AddDelegation(testCtx, targetsKeyBytes, policy.TargetsRoleName, "protect-main", authorizedKeys, []string{"git:refs/heads/main"}, false); err != nil {
+	if err := r.AddDelegation(testCtx, targetsKeyBytes, policy.TargetsRoleName, "protect-main", authorizedKeys, []string{"git:refs/heads/main"}, 1, false); err != nil {
 		t.Fatal(err)
 	}
 

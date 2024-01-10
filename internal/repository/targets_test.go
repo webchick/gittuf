@@ -67,7 +67,7 @@ func TestAddDelegation(t *testing.T) {
 	assert.Equal(t, 2, len(targetsMetadata.Delegations.Roles))
 	assert.Contains(t, targetsMetadata.Delegations.Roles, policy.AllowRule())
 
-	err = r.AddDelegation(context.Background(), targetsKeyBytes, policy.TargetsRoleName, ruleName, authorizedKeyBytes, rulePatterns, false)
+	err = r.AddDelegation(context.Background(), targetsKeyBytes, policy.TargetsRoleName, ruleName, authorizedKeyBytes, rulePatterns, 1, false)
 	assert.Nil(t, err)
 
 	state, err = policy.LoadCurrentState(context.Background(), r.r)
@@ -102,7 +102,7 @@ func TestRemoveDelegation(t *testing.T) {
 	authorizedKeyBytes := [][]byte{targetsKeyBytes}
 	rulePatterns := []string{"git:branch=main"}
 
-	err = r.AddDelegation(context.Background(), targetsKeyBytes, policy.TargetsRoleName, ruleName, authorizedKeyBytes, rulePatterns, false)
+	err = r.AddDelegation(context.Background(), targetsKeyBytes, policy.TargetsRoleName, ruleName, authorizedKeyBytes, rulePatterns, 1, false)
 	assert.Nil(t, err)
 
 	state, err := policy.LoadCurrentState(context.Background(), r.r)
