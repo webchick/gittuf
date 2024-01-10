@@ -24,9 +24,13 @@ func InitializeTargetsMetadata() *tuf.TargetsMetadata {
 
 // AddOrUpdateDelegation is used to add or amend a delegation in
 // TargetsMetadata.
-func AddOrUpdateDelegation(targetsMetadata *tuf.TargetsMetadata, ruleName string, authorizedKeys []*tuf.Key, rulePatterns []string) (*tuf.TargetsMetadata, error) {
+func AddOrUpdateDelegation(targetsMetadata *tuf.TargetsMetadata, ruleName string, authorizedKeys []*tuf.Key, rulePatterns []string, threshold int) (*tuf.TargetsMetadata, error) {
 	if ruleName == AllowRuleName {
 		return nil, ErrCannotManipulateAllowRule
+	}
+
+	if len(authorizedKeys) < threshold {
+		return nil, ErrCannotMeetThreshold
 	}
 
 	authorizedKeyIDs := []string{}
@@ -48,7 +52,10 @@ func AddOrUpdateDelegation(targetsMetadata *tuf.TargetsMetadata, ruleName string
 			// update existing delegation
 			existingDelegation = true
 			delegation.Paths = rulePatterns
-			delegation.Role = tuf.Role{KeyIDs: authorizedKeyIDs, Threshold: 1}
+			delegation.Role = tuf.Role{
+				KeyIDs:    authorizedKeyIDs,
+				Threshold: threshold,
+			}
 		}
 
 		allDelegations = append(allDelegations, delegation)
@@ -61,7 +68,7 @@ func AddOrUpdateDelegation(targetsMetadata *tuf.TargetsMetadata, ruleName string
 			Terminating: false,
 			Role: tuf.Role{
 				KeyIDs:    authorizedKeyIDs,
-				Threshold: 1,
+				Threshold: threshold,
 			},
 		})
 	}

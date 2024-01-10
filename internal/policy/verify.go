@@ -43,7 +43,7 @@ var (
 	ErrLastGoodEntryIsSkipped  = errors.New("entry expected to be unskipped is marked as skipped")
 	ErrUnknownObjectType       = errors.New("unknown object type passed to verify signature")
 	ErrInvalidVerifier         = errors.New("verifier has invalid parameters (is threshold 0?)")
-	ErrVerifierConditionsUnmet = errors.New("verifier's key and threshold constrains not met")
+	ErrVerifierConditionsUnmet = errors.New("verifier's key and threshold constraints not met")
 )
 
 // VerifyRef verifies the signature on the latest RSL entry for the target ref

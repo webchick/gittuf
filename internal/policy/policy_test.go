@@ -356,7 +356,11 @@ func TestGetStateForCommit(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	targetsMetadata, err = AddOrUpdateDelegation(targetsMetadata, "new-rule", []*tuf.Key{}, []string{"*"}) // just a dummy rule
+	key, err := gpg.LoadGPGKeyFromBytes(gpgPubKeyBytes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	targetsMetadata, err = AddOrUpdateDelegation(targetsMetadata, "new-rule", []*tuf.Key{key}, []string{"*"}, 1) // just a dummy rule
 	if err != nil {
 		t.Fatal(err)
 	}

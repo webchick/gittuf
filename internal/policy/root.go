@@ -121,3 +121,21 @@ func DeleteTargetsKey(rootMetadata *tuf.RootMetadata, keyID string) (*tuf.RootMe
 
 	return rootMetadata, nil
 }
+
+// UpdateTargetsThreshold sets the threshold for the top level Targets role.
+func UpdateTargetsThreshold(rootMetadata *tuf.RootMetadata, threshold int) (*tuf.RootMetadata, error) {
+	if _, ok := rootMetadata.Roles[TargetsRoleName]; !ok {
+		return rootMetadata, nil
+	}
+
+	targetsRole := rootMetadata.Roles[TargetsRoleName]
+
+	if len(targetsRole.KeyIDs) < threshold {
+		return nil, ErrCannotMeetThreshold
+	}
+
+	targetsRole.Threshold = threshold
+	rootMetadata.Roles[TargetsRoleName] = targetsRole
+
+	return rootMetadata, nil
+}
