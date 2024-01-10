@@ -18,6 +18,7 @@ type options struct {
 	ruleName       string
 	authorizedKeys []string
 	rulePatterns   []string
+	threshold      int
 }
 
 func (o *options) AddFlags(cmd *cobra.Command) {
@@ -51,6 +52,13 @@ func (o *options) AddFlags(cmd *cobra.Command) {
 		"patterns used to identify namespaces rule applies to",
 	)
 	cmd.MarkFlagRequired("rule-pattern") //nolint:errcheck
+
+	cmd.Flags().IntVar(
+		&o.threshold,
+		"threshold",
+		1,
+		"threshold of required valid signatures",
+	)
 }
 
 func (o *options) Run(cmd *cobra.Command, _ []string) error {
@@ -74,7 +82,7 @@ func (o *options) Run(cmd *cobra.Command, _ []string) error {
 		authorizedKeysBytes = append(authorizedKeysBytes, kb)
 	}
 
-	return repo.AddDelegation(cmd.Context(), keyBytes, o.policyName, o.ruleName, authorizedKeysBytes, o.rulePatterns, true)
+	return repo.AddDelegation(cmd.Context(), keyBytes, o.policyName, o.ruleName, authorizedKeysBytes, o.rulePatterns, o.threshold, true)
 }
 
 func New(persistent *persistent.Options) *cobra.Command {
